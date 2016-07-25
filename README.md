@@ -1,6 +1,8 @@
 # Ember-material-design-datepicker
 
-This README outlines the details of collaborating on this Ember addon.
+# This addon is coming soon
+
+# Collaborating
 
 ## Installation
 
