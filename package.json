@@ -1,7 +1,7 @@
 {
   "name": "ember-material-design-datepicker",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "A material design themed datepicker for Ember",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -16,7 +16,7 @@
     "node": ">= 0.10.0"
   },
   "author": "",
-  "license": "MIT",
+  "license": "Unlicensed",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",
     "ember-ajax": "^2.0.1",
