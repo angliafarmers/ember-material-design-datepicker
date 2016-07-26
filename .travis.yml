@@ -1,7 +1,8 @@
 ---
 language: node_js
+
 node_js:
-  - "4"
+  - "5"
 
 sudo: false
 
@@ -10,16 +11,17 @@ cache:
     - node_modules
 
 env:
-  - EMBER_TRY_SCENARIO=default
-  - EMBER_TRY_SCENARIO=ember-1.13
+  - EMBER_TRY_SCENARIO=ember-2.5
+  - EMBER_TRY_SCENARIO=ember-2.6
   - EMBER_TRY_SCENARIO=ember-release
-  - EMBER_TRY_SCENARIO=ember-beta
-  - EMBER_TRY_SCENARIO=ember-canary
+  - ALLOW_DEPRECATIONS=true EMBER_TRY_SCENARIO=ember-beta
+  - ALLOW_DEPRECATIONS=true EMBER_TRY_SCENARIO=ember-canary
 
 matrix:
   fast_finish: true
   allow_failures:
-    - env: EMBER_TRY_SCENARIO=ember-canary
+    - env: ALLOW_DEPRECATIONS=true EMBER_TRY_SCENARIO=ember-beta
+    - env: ALLOW_DEPRECATIONS=true EMBER_TRY_SCENARIO=ember-canary
 
 before_install:
   - npm config set spin false
@@ -27,10 +29,31 @@ before_install:
   - npm install phantomjs-prebuilt
 
 install:
+  - npm install -g bower
   - npm install
   - bower install
 
 script:
-  # Usually, it's ok to finish the test scenario without reverting
-  #  to the addon's original dependency state, skipping "cleanup".
-  - ember try $EMBER_TRY_SCENARIO test --skip-cleanup
+  - ember try:one $EMBER_TRY_SCENARIO test --skip-cleanup
+
+# after_script:
+#   - sed -i -- 's/SF:ember-cli-materialize\/\(.*\)/SF:addon\/\1.js/' lcov.dat
+#   - cat lcov.dat | coveralls
+
+after_success:
+# Remove the downloaded copy of phantomJS
+- rm -rf travis-phantomjs
+# Add a remote, authenticating via an OAuth token (encrypted via "travis secure")
+- git remote add deploy https://$GH_TOKEN:x-oauth-basic@github.com/mike-north/ember-cli-materialize.git
+# Download all branches from this new remote (really the same remote, but different auth)
+- git fetch deploy
+# Check out a local copy of "master", but don't switch to it yet
+- git branch $GH_DEST_BRANCH deploy/$GH_DEST_BRANCH
+# Set up some required git config stuff (more env variables encrypted via "travis secure")
+- git config user.name $GIT_NAME
+- git config user.email $GIT_EMAIL
+# Generate the github pages. When this command is finished I'll be on "master" branch with a
+# new commit already made (but not pushed)
+# Push the new commit
+- /bin/bash lib/try-generate-pages.sh
+- git checkout master

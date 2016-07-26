@@ -1,5 +1,8 @@
 # Ember-material-design-datepicker
 
+[![Build Status](https://travis-ci.org/angliafarmers/ember-material-design-datepicker.svg?branch=master)](https://travis-ci.org/angliafarmers/ember-material-design-datepicker)
+[![Code Climate](https://codeclimate.com/github/angliafarmers/ember-material-design-datepicker/badges/gpa.svg)](https://codeclimate.com/github/angliafarmers/ember-material-design-datepicker)
+
 # This addon is coming soon
 
 # Collaborating
