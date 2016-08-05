@@ -7,6 +7,9 @@
 
 # Collaborating
 
+## Styling
+We use Eslint to enforce styling. We aim to match [Ember Styling Guide](https://github.com/emberjs/ember.js/blob/master/STYLEGUIDE.md) but this is a work in progress.
+
 ## Installation
 
 * `git clone` this repository
