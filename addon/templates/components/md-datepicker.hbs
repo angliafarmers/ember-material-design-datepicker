@@ -1,2 +1,7 @@
-{{input type=type value=value}}
-{{testComputed}}
+{{input type="text" class=mdClass value=_dateText key-up="keyUp"}}
+<span class="bar"></span>
+{{#if errorMessage.length}}
+  <div class="datepicker-error">{{errorMessage}}</div>
+{{else if isInvalidDate}}
+  <div class="datepicker-error">{{defaultErrorMessage}}</div>
+{{/if}}
