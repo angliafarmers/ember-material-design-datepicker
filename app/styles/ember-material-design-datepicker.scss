@@ -1,0 +1,108 @@
+$accent-color: #e040fb !default;
+$disabled-textfield-grey: #9e9e9e !default;
+$divider-color: #c2c2c2 !default;
+$font: Roboto, sans-serif !default;
+$font-form: 14px !default;
+$font-small: 12px !default;
+$invalid-red: #f44336 !default;
+
+.md-datepicker-group {
+  margin: 15px 0;
+  position: relative;
+  box-sizing: border-box;
+  font-family: $font;
+
+  input::-ms-clear {
+    display: none;
+  }
+
+  input {
+    font-size: $font-form;
+    font-family: $font;
+    box-sizing: border-box;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid $accent-color;
+    padding: 10px 10px 5px 5px;
+    display:block;
+    width: 100%;
+    height: 33px;
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px white inset;
+    }
+
+    &:disabled {
+      color: $disabled-textfield-grey;
+      border-bottom-color: $disabled-textfield-grey;
+      cursor: not-allowed;
+    }
+
+    ~ .datepicker-error {
+      color: $invalid-red;
+      font-size: $font-small;
+      padding: 10px 0 5px 5px;
+    }
+
+    ~ .bar {
+      position: relative;
+      display: block;
+
+      &:before {
+        content: '';
+        height: 2px;
+        width: 0;
+        bottom: 0;
+        position: absolute;
+        background: $accent-color;
+        transition: 0.2s ease all;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all;
+      }
+    }
+
+    ~ label {
+      position: absolute;
+      color: $divider-color;
+      font-size: $font-form;
+      left: 5px;
+      top: 5px;
+      pointer-events:none;
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+    }
+
+    &:disabled ~ label {
+      color: $disabled-textfield-grey;
+    }
+
+    &:focus {
+      outline: 0;
+
+      ~ .bar:before {
+        width: 100%;
+      }
+    }
+
+    &:focus ~ label {
+      top: -11px;
+      font-size: $font-small;
+      color: $accent-color;
+    }
+
+    &.invalid, &:disabled.invalid, &.isDirty:required.invalid, &:disabled.isDirty:required, &:disabled.isDirty.validate {
+      border-bottom: 1px solid $invalid-red;
+
+      ~ .bar {
+        &:before {
+          background: $invalid-red;
+        }
+      }
+
+      ~ label {
+        color: $invalid-red;
+      }
+    }
+  }
+}
