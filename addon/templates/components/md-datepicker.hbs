@@ -1,7 +1,67 @@
-{{input type="text" class=mdClass value=_dateText key-up="keyUp"}}
+{{input type="text" class=mdClass value=dateText key-up="keyUp" required=required}}
 <span class="bar"></span>
+<div class="down-arrow" {{action "downArrowClick" on="click"}}><i></i></div>
+<div class="datepicker-container" {{action 'absorbMouseDown' on="mouseDown" bubbles=false}}>
+  <div class="datepicker-inner">
+    <div class="datepicker-head">
+      <div class="head-year">
+        <p>{{selectedYear}}</p>
+      </div>
+      <div class="head-day-month">
+        <p>{{selectedDayMonth}}</p>
+      </div>
+    </div>
+    <div class="datepicker-main">
+      <div class="month-select">
+        <button class="month-toggle" {{action 'monthToggle' '-1'}}>
+          <div>
+            <svg viewBox="0 0 24 24">
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+            </svg>
+          </div>
+        </button>
+        <div class="selected-month-year">
+          <p>{{viewingLongMonth}} {{viewingYear}}</p>
+        </div>
+        <button class="month-toggle"  {{action 'monthToggle' '1'}}>
+          <div>
+            <svg viewBox="0 0 24 24">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div class="day-header">
+        <span>M</span>
+        <span>T</span>
+        <span>W</span>
+        <span>T</span>
+        <span>F</span>
+        <span>S</span>
+        <span>S</span>
+      </div>
+      <div class="day-select">
+        {{#each weekSpans as |weekSpan|}}
+          <div class="week">
+            {{#each weekSpan.daySpans as |daySpan|}}
+              {{#if daySpan.day.length}}
+                <button class={{if daySpan.isSelectedDate "btn-date selected" "btn-date"}} {{action "dateClicked" daySpan.date}}>
+                  <div class="date-circle"></div>
+                  <span class={{if daySpan.today "today"}}>{{daySpan.day}}</span>
+                </button>
+              {{else}}
+                <span class="blank-day"></span>
+              {{/if}}
+            {{/each}}
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
 {{#if errorMessage.length}}
   <div class="datepicker-error">{{errorMessage}}</div>
 {{else if isInvalidDate}}
   <div class="datepicker-error">{{defaultErrorMessage}}</div>
 {{/if}}
+<label class="{{placeholderClass}}">{{placeholder}}</label>
