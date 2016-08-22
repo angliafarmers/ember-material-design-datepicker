@@ -39,7 +39,7 @@ $accent-color: #7c4dff;
   }
 }
 
-.col-4, .col-6 {
+.col-2, .col-4, .col-6 {
   position: relative;
   min-height: 1px;
   padding-left: 15px;
@@ -47,8 +47,12 @@ $accent-color: #7c4dff;
   float: left;
 }
 
+.col-2 {
+  width: 16.66667%;
+}
+
 .col-4 {
-  width: 33.3333%;
+  width: 33.33333%;
 }
 
 .col-6 {

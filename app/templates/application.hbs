@@ -4,17 +4,22 @@
       <h2>Example(s) of the Ember Material Design Datepicker in action</h2>
     </div>
   </div>
-
   <div class="row">
-    <div class="col-4">
+    <div class="col-2">
       <h3>American Date</h3>
-      {{md-datepicker selectedDate=startDate}}
+      {{md-datepicker placeholder="Enter Date" selectedDate=selectedDate dateChanged=(action (mut selectedDate))}}
     </div>
   </div>
   <div class="row">
-    <div class="col-4">
+    <div class="col-2">
       <h3>UK Date</h3>
-      {{md-datepicker selectedDate=startDate dateFormat='DD/MM/YYYY'}}
+      {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate2 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate2))}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      <h3>UK Date, no initial date</h3>
+      {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate3 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate3))}}
     </div>
   </div>
 </div>
