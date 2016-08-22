@@ -7,18 +7,18 @@
   <div class="row">
     <div class="col-2">
       <h3>American Date</h3>
-      {{md-datepicker placeholder="Enter Date" selectedDate=selectedDate dateChanged=(action (mut selectedDate))}}
+      {{md-datepicker placeholder="Enter Date" selectedDate=selectedDate dateChanged=(action (mut selectedDate)) required=true}}
     </div>
   </div>
   <div class="row">
     <div class="col-2">
       <h3>UK Date</h3>
-      {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate2 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate2))}}
+      {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate2 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate2)) required=true}}
     </div>
   </div>
   <div class="row">
     <div class="col-2">
-      <h3>UK Date, no initial date</h3>
+      <h3>UK, no initial date, not required</h3>
       {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate3 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate3))}}
     </div>
   </div>

@@ -86,7 +86,12 @@ export default Ember.Component.extend({
 
     return weekSpans;
   }),
-  defaultErrorMessage: Ember.computed('format', function() {
+  defaultErrorMessage: Ember.computed('format', 'required', 'dateText', function() {
+    let dateText = this.get('dateText');
+    if (this.get('required') && (dateText === undefined || dateText === null || dateText === '')) {
+      return 'Date is required';
+    }
+
     return 'Invalid date, required format is ' + this.get('format');
   }),
   format: Ember.computed('dateFormat', function() {
@@ -97,8 +102,14 @@ export default Ember.Component.extend({
 
     return 'MM/DD/YYYY';
   }),
-  isValidDate: Ember.computed('dateText', function() {
-    return moment(this.get('dateText'), this.get('format'), this.get('useStrictMode')).isValid();
+  isValidDate: Ember.computed('dateText', 'required', function() {
+    let dateText = this.get('dateText');
+
+    if (!this.get('required') && (dateText === undefined || dateText === null || dateText === '')) {
+      return true;
+    }
+
+    return moment(dateText, this.get('format'), this.get('useStrictMode')).isValid();
   }),
   isInvalidDate: Ember.computed.not('isValidDate'),
   mdClass: Ember.computed('inputClass', 'isValidDate', function() {
@@ -126,6 +137,10 @@ export default Ember.Component.extend({
       return moment(selectedDate).format('ddd, MMM D');
     }
     if (this.get('isInvalidDate')) {
+      if (this.get('required')) {
+        return 'Date is required';
+      }
+
       return 'Invalid date';
     }
 
@@ -164,8 +179,9 @@ export default Ember.Component.extend({
       this.$('input').focus();
     },
     keyUp() {
-      if (this.get('isValidDate')) {
-        this.sendAction('dateChanged', moment(this.get('dateText'), this.get('format')).toDate());
+      let dateText = this.get('dateText');
+      if (this.get('isValidDate') && dateText !== undefined && dateText !== null && dateText !== '') {
+        this.sendAction('dateChanged', moment(dateText, this.get('format')).toDate());
       }
       else {
         this.sendAction('dateChanged', null);
