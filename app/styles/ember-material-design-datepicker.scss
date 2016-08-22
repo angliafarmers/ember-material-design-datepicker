@@ -6,6 +6,7 @@ $text-on-accent-color: #fff !default;
 $invalid-red: #f44336 !default;
 $month-selector-color: #757575 !default;
 $datepicker-main-text-color: #383838 !default;
+$datepicker-disabled-text-color: #CCCCCC !default;
 $box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !default;
 $font: Roboto, sans-serif !default;
 $font-form: 14px !default;
@@ -78,8 +79,20 @@ $font-small: 12px !default;
       -webkit-transition: 0.2s ease all;
     }
 
-    &:disabled ~ label {
-      color: $disabled-textfield-grey;
+    &:disabled  {
+      & ~ label {
+        color: $disabled-textfield-grey;
+      }
+
+      & ~ .down-arrow {
+        cursor: not-allowed;
+
+        i {
+          &:after {
+            border-top: 0.55em solid $disabled-textfield-grey;
+          }
+        }
+      }
     }
 
     &:focus {
@@ -151,6 +164,10 @@ $font-small: 12px !default;
 
     p {
       margin: 0;
+    }
+
+    &.error-message-present {
+      top: 60px;
     }
 
     .datepicker-inner {
@@ -301,6 +318,31 @@ $font-small: 12px !default;
 
                 span {
                   color: $text-on-accent-color;
+                }
+              }
+
+              &:disabled {
+                cursor: not-allowed;
+
+                span {
+                  color: $datepicker-disabled-text-color;
+                }
+
+                &:hover {
+                  .date-circle {
+                    opacity: 0;
+                    transform: scale(0);
+                  }
+
+                  span {
+                    color: $datepicker-disabled-text-color;
+                  }
+                }
+
+                &.selected {
+                  span {
+                    color: $text-on-accent-color;
+                  }
                 }
               }
             }

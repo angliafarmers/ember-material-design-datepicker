@@ -3,11 +3,15 @@ import layout from '../templates/components/md-datepicker';
 
 // TODO change to auto generated docs
 // dateFormat
+// required
+// disabled
 // selectedDate
 // placeholder
 // relaxValidation
 // inputClass
 // errorMessage
+// minDate
+// maxDate
 
 export default Ember.Component.extend({
   layout,
@@ -22,6 +26,12 @@ export default Ember.Component.extend({
     }
 
     return this._super(...arguments);
+  },
+  cut: function() {
+    this.sendAction('keyUp');
+  },
+  paste: function() {
+    this.sendAction('keyUp');
   },
   dateText: Ember.computed('selectedDate', 'format', {
     set(key, val) {
@@ -42,16 +52,18 @@ export default Ember.Component.extend({
       return dateText;
     }
   }),
-  daySpans: Ember.computed('_viewingDate', 'selectedDate', function() {
+  daySpans: Ember.computed('_viewingDate', 'selectedDate', 'minDate', 'maxDate', function() {
     let viewingDate = this.get('_viewingDate')
     let selectedDate = this.get('selectedDate');
+    let minDate = this.get('minDate');
+    let maxDate = this.get('maxDate');
 
     let daySpans = Ember.A([]);
 
     // Add blank days from Monday to the first day of the month
     let firstDay = Number(moment(viewingDate).startOf('month').format('E'));
     for (let i = 0; i < firstDay - 1; i++) {
-      daySpans.pushObject({ day: '', today: false, isSelectedDate: false, date: null });
+      daySpans.pushObject({ day: '', today: false, isSelectedDate: false, date: null, disabled: false });
     }
 
     // Populate for each day
@@ -64,13 +76,22 @@ export default Ember.Component.extend({
       if (selectedDate) {
         isSelectedDate = moment(selectedDate).isSame(date, 'day');
       }
-      daySpans.pushObject({ day: day.toString(), today: today.isSame(date, 'day'), isSelectedDate, date });
+
+      let disabled = false;
+      if (minDate && moment(minDate).isAfter(date, 'day')) {
+        disabled = true;
+      }
+      else if (maxDate && moment(maxDate).isBefore(date, 'day')) {
+        disabled = true;
+      }
+
+      daySpans.pushObject({ day: day.toString(), today: today.isSame(date, 'day'), isSelectedDate, date, disabled });
     }
 
     // Fill out remaining row
     let lastDay = Number(moment(viewingDate).endOf('month').format('E'));
     for (let i = lastDay; i < 7; i++) {
-      daySpans.pushObject({ day: '', today: false, isSelectedDate: false, date: null });
+      daySpans.pushObject({ day: '', today: false, isSelectedDate: false, date: null, disabled: false });
     }
 
     return daySpans;
@@ -86,13 +107,26 @@ export default Ember.Component.extend({
 
     return weekSpans;
   }),
-  defaultErrorMessage: Ember.computed('format', 'required', 'dateText', function() {
+  defaultErrorMessage: Ember.computed('format', 'required', 'dateText', 'isEarly', 'isLate', 'minDate', 'maxDate', function() {
     let dateText = this.get('dateText');
     if (this.get('required') && (dateText === undefined || dateText === null || dateText === '')) {
       return 'Date is required';
     }
 
-    return 'Invalid date, required format is ' + this.get('format');
+    let format = this.get('format');
+
+    if (this.get('isEarly')) {
+      return 'Date entered must be on or after ' + moment(this.get('minDate')).format(format);
+    }
+
+    if (this.get('isLate')) {
+      return 'Date entered must be on or before ' + moment(this.get('maxDate')).format(format);
+    }
+
+    return 'Invalid date, required format is ' + format;
+  }),
+  errorMessageShown: Ember.computed('errorMessage', 'isInvalidDate', function() {
+    return this.get('errorMessage.length') > 0 || this.get('isInvalidDate');
   }),
   format: Ember.computed('dateFormat', function() {
     let dateFormat = this.get('dateFormat');
@@ -102,14 +136,34 @@ export default Ember.Component.extend({
 
     return 'MM/DD/YYYY';
   }),
-  isValidDate: Ember.computed('dateText', 'required', function() {
+  isEarly: Ember.computed('dateText', 'minDate', 'format', 'useStrictMode', function() {
+    let dateText = this.get('dateText');
+    let minDate = this.get('minDate');
+
+    if (!minDate) {
+      return false;
+    }
+
+    return moment(dateText, this.get('format'), this.get('useStrictMode')).isBefore(moment(minDate), 'day');
+  }),
+  isLate: Ember.computed('dateText', 'maxDate', 'format', 'useStrictMode', function() {
+    let dateText = this.get('dateText');
+    let maxDate = this.get('maxDate');
+
+    if (!maxDate) {
+      return false;
+    }
+
+    return moment(dateText, this.get('format'), this.get('useStrictMode')).isAfter(moment(maxDate), 'day');
+  }),
+  isValidDate: Ember.computed('dateText', 'required', 'isEarly', 'isLate', function() {
     let dateText = this.get('dateText');
 
     if (!this.get('required') && (dateText === undefined || dateText === null || dateText === '')) {
       return true;
     }
 
-    return moment(dateText, this.get('format'), this.get('useStrictMode')).isValid();
+    return moment(dateText, this.get('format'), this.get('useStrictMode')).isValid() && !this.get('isEarly') && !this.get('isLate');
   }),
   isInvalidDate: Ember.computed.not('isValidDate'),
   mdClass: Ember.computed('inputClass', 'isValidDate', function() {
@@ -131,13 +185,15 @@ export default Ember.Component.extend({
 
     return '';
   }),
-  selectedDayMonth: Ember.computed('selectedDate', 'isInvalidDate', function() {
+  selectedDayMonth: Ember.computed('selectedDate', 'isInvalidDate', 'dateText', function() {
     let selectedDate = this.get('selectedDate');
+    let dateText = this.get('dateText');
+
     if (selectedDate) {
       return moment(selectedDate).format('ddd, MMM D');
     }
     if (this.get('isInvalidDate')) {
-      if (this.get('required')) {
+      if (this.get('required') && (dateText === undefined || dateText === null || dateText === '')) {
         return 'Date is required';
       }
 

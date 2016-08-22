@@ -22,4 +22,17 @@
       {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate3 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate3))}}
     </div>
   </div>
+  <div class="row">
+    <div class="col-2">
+      <h3>UK, min and max supplied</h3>
+      {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate4 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate4)) required=true
+        minDate=minDate maxDate=maxDate}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      <h3>Disabled</h3>
+      {{md-datepicker placeholder="Enter Date" selectedDate=selectedDate dateChanged=(action (mut selectedDate)) required=true disabled=true}}
+    </div>
+  </div>
 </div>

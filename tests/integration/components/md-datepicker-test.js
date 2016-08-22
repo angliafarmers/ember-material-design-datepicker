@@ -241,3 +241,48 @@ test('clicking date returns expected date', function(assert) {
   // 2nd of dec
   this.$('button.btn-date:eq(1)').trigger('click');
 });
+
+test('renders a calendar with disabled days when min or max date specified', function(assert) {
+  assert.expect(3);
+
+  let startDate = '08/21/2000';
+  let minDate = '08/03/2000';
+  let maxDate = '08/30/2000';
+  this.set('selectedDate', moment(startDate, 'MM/DD/YYYY').toDate());
+  this.set('minDate', moment(minDate, 'MM/DD/YYYY').toDate());
+  this.set('maxDate', moment(maxDate, 'MM/DD/YYYY').toDate());
+  this.render(hbs`{{md-datepicker selectedDate=selectedDate minDate=minDate maxDate=maxDate}}`);
+
+  assert.ok(this.$('.btn-date:eq(0)').is(':disabled'));
+  assert.ok(this.$('.btn-date:eq(1)').is(':disabled'));
+
+  assert.ok(this.$('.btn-date:eq(30)').is(':disabled'));
+});
+
+test('date changed returns null for day earlier than min date', function(assert) {
+  assert.expect(2);
+
+  let minDate = '08/03/2000';
+  this.set('minDate', moment(minDate, 'MM/DD/YYYY').toDate());
+
+  this.render(hbs`{{md-datepicker dateChanged="assertDateChanged" minDate=minDate}}`);
+
+  this.on('assertDateChanged', date => assert.equal(date, null));
+
+  this.$('input').val('08/02/2000').keyup();
+  assert.equal(this.$('.datepicker-error').text().trim(), 'Date entered must be on or after 08/03/2000');
+});
+
+test('date changed returns null for day after max date', function(assert) {
+  assert.expect(2);
+
+  let maxDate = '08/25/2000';
+  this.set('maxDate', moment(maxDate, 'MM/DD/YYYY').toDate());
+
+  this.render(hbs`{{md-datepicker dateChanged="assertDateChanged" maxDate=maxDate}}`);
+
+  this.on('assertDateChanged', date => assert.equal(date, null));
+
+  this.$('input').val('08/26/2000').keyup();
+  assert.equal(this.$('.datepicker-error').text().trim(), 'Date entered must be on or before 08/25/2000');
+});
