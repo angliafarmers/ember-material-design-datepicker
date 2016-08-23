@@ -29,6 +29,7 @@ Sass is required for this addon. There are a number of sass variables that can e
  * placeholder (optional) - The text to display above the date's text.
  * relaxValidation (optional) - When set to true this turns off the 'use strict mode' option within Moment.js when validating the date's text. Defaults to false.
  * inputClass (optional) - Passed directly onto the input element as its class attribute.
+ * name (optional) - Passed directly onto the input element.
  * errorMessage (optional) - When provided an error message can be displayed below the input element.
  * minDate (optional) - When provided this prevents the user from selecting a date earlier than this. It is also used when validating the date's text.
  * maxDate (optional) - When provided this prevents the user from selecting a date after this. It is also used when validating the date's text.
