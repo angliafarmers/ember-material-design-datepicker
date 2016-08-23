@@ -1,18 +1,6 @@
 import Ember from 'ember';
 import layout from '../templates/components/md-datepicker';
 
-// TODO change to auto generated docs
-// dateFormat
-// required
-// disabled
-// selectedDate
-// placeholder
-// relaxValidation
-// inputClass
-// errorMessage
-// minDate
-// maxDate
-
 export default Ember.Component.extend({
   layout,
   classNames: ['md-datepicker-group'],
