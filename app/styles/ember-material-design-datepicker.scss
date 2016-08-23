@@ -105,6 +105,7 @@ $font-small: 12px !default;
       ~ .datepicker-container {
         .datepicker-inner {
           display: block;
+          min-height: 440px;
         }
       }
     }
