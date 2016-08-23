@@ -27,11 +27,13 @@ export default Ember.Component.extend({
 
     return this._super(...arguments);
   },
-  cut: function() {
-    this.sendAction('keyUp');
-  },
-  paste: function() {
-    this.sendAction('keyUp');
+  didInsertElement() {
+    // Currently unable to get right click cut/paste to work, so disable right click for now
+    this.$('input').on('contextmenu', function() {
+      return false;
+    });
+
+    return this._super(...arguments);
   },
   dateText: Ember.computed('selectedDate', 'format', {
     set(key, val) {
