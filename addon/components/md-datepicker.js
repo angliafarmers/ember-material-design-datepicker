@@ -163,7 +163,7 @@ export default Ember.Component.extend({
     return this.getMoment(dateText, this.get('format'), this.get('useStrictMode')).isValid() && !this.get('isEarly') && !this.get('isLate');
   }),
   isInvalidDate: Ember.computed.not('isValidDate'),
-  mdClass: Ember.computed('inputClass', 'isValidDate', function() {
+  mdClass: Ember.computed('inputClass', 'isValidDate', 'errorMessage', function() {
     let result = '';
     let inputClass = this.get('inputClass');
     if (inputClass) {
