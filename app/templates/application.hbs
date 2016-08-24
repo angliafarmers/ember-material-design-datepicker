@@ -8,6 +8,7 @@
     <div class="col-2">
       <h3>American Date</h3>
       {{md-datepicker placeholder="Enter Date" selectedDate=selectedDate dateChanged=(action (mut selectedDate)) required=true}}
+      <p>{{selectedDate}}</p>
     </div>
   </div>
   <div class="row">
@@ -27,6 +28,13 @@
       <h3>UK, min and max supplied</h3>
       {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate4 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate4)) required=true
         minDate=minDate maxDate=maxDate}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      <h3>UTC mode</h3>
+      {{md-datepicker placeholder="Enter Date" selectedDate=selectedDateUtc dateChanged=(action (mut selectedDateUtc)) required=true utc=true}}
+      <p>{{selectedDateUtc}}</p>
     </div>
   </div>
   <div class="row">
