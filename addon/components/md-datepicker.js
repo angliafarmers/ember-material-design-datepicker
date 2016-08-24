@@ -170,7 +170,7 @@ export default Ember.Component.extend({
       result += inputClass;
     }
 
-    if (this.get('isValidDate')) {
+    if (this.get('isValidDate') && !this.get('errorMessage.length')) {
       return result;
     }
     return result === '' ? 'invalid' : result + ' ' + 'invalid';
