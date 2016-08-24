@@ -286,3 +286,31 @@ test('date changed returns null for day after max date', function(assert) {
   this.$('input').val('08/26/2000').keyup();
   assert.equal(this.$('.datepicker-error').text().trim(), 'Date entered must be on or before 08/25/2000');
 });
+
+test('date changed returns local date when utc option is false', function(assert) {
+  assert.expect(1);
+  let textDate = '06/27/2012';
+  let expectedUtcOffset = moment().utcOffset();
+
+  this.render(hbs`{{md-datepicker dateChanged="assertDateChanged"}}`);
+
+  this.on('assertDateChanged', date => {
+    assert.equal(moment(date).utcOffset(), expectedUtcOffset);
+  });
+
+  this.$('input').val(textDate).keyup();
+});
+
+test('date changed returns utc date when utc option is true', function(assert) {
+  assert.expect(1);
+  let textDate = '06/27/2012';
+  let expectedISO = '2012-06-27T00:00:00.000Z';
+
+  this.render(hbs`{{md-datepicker dateChanged="assertDateChanged" utc=true}}`);
+
+  this.on('assertDateChanged', date => {
+    assert.equal(moment.utc(date).toISOString(), expectedISO);
+  });
+
+  this.$('input').val(textDate).keyup();
+});

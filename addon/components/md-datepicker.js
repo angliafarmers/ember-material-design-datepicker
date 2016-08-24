@@ -7,10 +7,10 @@ export default Ember.Component.extend({
   init() {
     let selectedDate = this.get('selectedDate');
     if (selectedDate) {
-      this.set('_viewingDate', moment(selectedDate).toDate());
+      this.set('_viewingDate', this.getMoment(selectedDate).toDate());
     }
     else {
-      this.set('_viewingDate', moment().toDate());
+      this.set('_viewingDate', this.getMoment().toDate());
     }
 
     return this._super(...arguments);
@@ -33,7 +33,7 @@ export default Ember.Component.extend({
       let _dateText = this.get('_dateText');
       let selectedDate = this.get('selectedDate');
       if (selectedDate) {
-        dateText = moment(selectedDate).format(this.get('format'));
+        dateText = this.getMoment(selectedDate).format(this.get('format'));
       }
       else {
         dateText = _dateText;
@@ -51,27 +51,27 @@ export default Ember.Component.extend({
     let daySpans = Ember.A([]);
 
     // Add blank days from Monday to the first day of the month
-    let firstDay = Number(moment(viewingDate).startOf('month').format('E'));
+    let firstDay = Number(this.getMoment(viewingDate).startOf('month').format('E'));
     for (let i = 0; i < firstDay - 1; i++) {
       daySpans.pushObject({ day: '', today: false, isSelectedDate: false, date: null, disabled: false });
     }
 
     // Populate for each day
-    let daysInMonth = moment(viewingDate).daysInMonth();
-    let today = moment();
+    let daysInMonth = this.getMoment(viewingDate).daysInMonth();
+    let today = this.getMoment();
     for (let i = 0; i < daysInMonth; i++) {
       let day = (i + 1);
-      let date = moment(moment(viewingDate).startOf('month')).add(day - 1, 'days');
+      let date = this.getMoment(this.getMoment(viewingDate).startOf('month')).add(day - 1, 'days').toDate();
       let isSelectedDate = false;
       if (selectedDate) {
-        isSelectedDate = moment(selectedDate).isSame(date, 'day');
+        isSelectedDate = this.getMoment(selectedDate).isSame(date, 'day');
       }
 
       let disabled = false;
-      if (minDate && moment(minDate).isAfter(date, 'day')) {
+      if (minDate && this.getMoment(minDate).isAfter(date, 'day')) {
         disabled = true;
       }
-      else if (maxDate && moment(maxDate).isBefore(date, 'day')) {
+      else if (maxDate && this.getMoment(maxDate).isBefore(date, 'day')) {
         disabled = true;
       }
 
@@ -79,7 +79,7 @@ export default Ember.Component.extend({
     }
 
     // Fill out remaining row
-    let lastDay = Number(moment(viewingDate).endOf('month').format('E'));
+    let lastDay = Number(this.getMoment(viewingDate).endOf('month').format('E'));
     for (let i = lastDay; i < 7; i++) {
       daySpans.pushObject({ day: '', today: false, isSelectedDate: false, date: null, disabled: false });
     }
@@ -106,11 +106,11 @@ export default Ember.Component.extend({
     let format = this.get('format');
 
     if (this.get('isEarly')) {
-      return 'Date entered must be on or after ' + moment(this.get('minDate')).format(format);
+      return 'Date entered must be on or after ' + this.getMoment(this.get('minDate')).format(format);
     }
 
     if (this.get('isLate')) {
-      return 'Date entered must be on or before ' + moment(this.get('maxDate')).format(format);
+      return 'Date entered must be on or before ' + this.getMoment(this.get('maxDate')).format(format);
     }
 
     return 'Invalid date, required format is ' + format;
@@ -134,7 +134,7 @@ export default Ember.Component.extend({
       return false;
     }
 
-    return moment(dateText, this.get('format'), this.get('useStrictMode')).isBefore(moment(minDate), 'day');
+    return this.getMoment(dateText, this.get('format'), this.get('useStrictMode')).isBefore(this.getMoment(minDate), 'day');
   }),
   isLate: Ember.computed('dateText', 'maxDate', 'format', 'useStrictMode', function() {
     let dateText = this.get('dateText');
@@ -144,7 +144,7 @@ export default Ember.Component.extend({
       return false;
     }
 
-    return moment(dateText, this.get('format'), this.get('useStrictMode')).isAfter(moment(maxDate), 'day');
+    return this.getMoment(dateText, this.get('format'), this.get('useStrictMode')).isAfter(this.getMoment(maxDate), 'day');
   }),
   isValidDate: Ember.computed('dateText', 'required', 'isEarly', 'isLate', function() {
     let dateText = this.get('dateText');
@@ -153,7 +153,7 @@ export default Ember.Component.extend({
       return true;
     }
 
-    return moment(dateText, this.get('format'), this.get('useStrictMode')).isValid() && !this.get('isEarly') && !this.get('isLate');
+    return this.getMoment(dateText, this.get('format'), this.get('useStrictMode')).isValid() && !this.get('isEarly') && !this.get('isLate');
   }),
   isInvalidDate: Ember.computed.not('isValidDate'),
   mdClass: Ember.computed('inputClass', 'isValidDate', function() {
@@ -180,7 +180,7 @@ export default Ember.Component.extend({
     let dateText = this.get('dateText');
 
     if (selectedDate) {
-      return moment(selectedDate).format('ddd, MMM D');
+      return this.getMoment(selectedDate).format('ddd, MMM D');
     }
     if (this.get('isInvalidDate')) {
       if (this.get('required') && (dateText === undefined || dateText === null || dateText === '')) {
@@ -194,16 +194,16 @@ export default Ember.Component.extend({
   }),
   viewingLongMonth: Ember.computed('_viewingDate', function() {
     let _viewingDate = this.get('_viewingDate');
-    return moment(_viewingDate).format('MMMM');
+    return this.getMoment(_viewingDate).format('MMMM');
   }),
   viewingYear: Ember.computed('_viewingDate', function() {
     let _viewingDate = this.get('_viewingDate');
-    return moment(_viewingDate).format('YYYY');
+    return this.getMoment(_viewingDate).format('YYYY');
   }),
   selectedYear: Ember.computed('selectedDate', function() {
     let selectedDate = this.get('selectedDate');
     if (selectedDate) {
-      return moment(selectedDate).format('YYYY');
+      return this.getMoment(selectedDate).format('YYYY');
     }
     return '';
   }),
@@ -214,6 +214,12 @@ export default Ember.Component.extend({
 
     return true;
   }),
+  getMoment(date, format, useStrictMode) {
+    if (this.get('utc')) {
+      return moment.utc(date, format, useStrictMode);
+    }
+    return moment(date, format, useStrictMode);
+  },
   actions: {
     absorbMouseDown() {
       // Used to retain focus in the input by absorbing mouse down 'clicks' on the datepicker that do not have explicit actions
@@ -227,14 +233,14 @@ export default Ember.Component.extend({
     keyUp() {
       let dateText = this.get('dateText');
       if (this.get('isValidDate') && dateText !== undefined && dateText !== null && dateText !== '') {
-        this.sendAction('dateChanged', moment(dateText, this.get('format')).toDate());
+        this.sendAction('dateChanged', this.getMoment(dateText, this.get('format')).toDate());
       }
       else {
         this.sendAction('dateChanged', null);
       }
     },
     monthToggle(value) {
-      this.set('_viewingDate', moment(this.get('_viewingDate')).add(Number(value), 'months').toDate());
+      this.set('_viewingDate', this.getMoment(this.get('_viewingDate')).add(Number(value), 'months').toDate());
     }
   }
 });
