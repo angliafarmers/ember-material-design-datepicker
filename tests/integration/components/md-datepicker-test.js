@@ -50,6 +50,19 @@ test('displays selected date on init for basic date in UK format', function(asse
   assert.equal(this.$('input').val(), expectedDate);
 });
 
+test('displays error message and invalid class when error message provided', function(assert) {
+  assert.expect(2);
+
+  let expectedDate = '08/21/2000';
+  this.set('selectedDate', moment(expectedDate, 'MM/DD/YYYY').toDate());
+  let expectedErrorMessage = 'some error';
+  this.set('errorMessage', expectedErrorMessage);
+  this.render(hbs`{{md-datepicker selectedDate=selectedDate errorMessage=errorMessage}}`);
+
+  assert.equal(this.$('.datepicker-error').text().trim(), expectedErrorMessage);
+  assert.equal(this.$('input.invalid').length, 1);
+});
+
 test('date changed returns null for bad year', function(assert) {
   assert.expect(4);
 
