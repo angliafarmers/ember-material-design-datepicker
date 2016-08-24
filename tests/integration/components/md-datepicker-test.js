@@ -314,3 +314,17 @@ test('date changed returns utc date when utc option is true', function(assert) {
 
   this.$('input').val(textDate).keyup();
 });
+
+test('date changed returns correct date and time when hour offset is used', function(assert) {
+  assert.expect(1);
+  let textDate = '06/27/2012';
+  let expectedISO = '2012-06-27T05:00:00.000Z';
+
+  this.render(hbs`{{md-datepicker dateChanged="assertDateChanged" utc=true hourOffset=5}}`);
+
+  this.on('assertDateChanged', date => {
+    assert.equal(moment.utc(date).toISOString(), expectedISO);
+  });
+
+  this.$('input').val(textDate).keyup();
+});

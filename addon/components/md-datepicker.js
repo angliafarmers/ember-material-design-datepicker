@@ -42,11 +42,12 @@ export default Ember.Component.extend({
       return dateText;
     }
   }),
-  daySpans: Ember.computed('_viewingDate', 'selectedDate', 'minDate', 'maxDate', function() {
+  daySpans: Ember.computed('_viewingDate', 'selectedDate', 'minDate', 'maxDate', 'hourOffset', function() {
     let viewingDate = this.get('_viewingDate')
     let selectedDate = this.get('selectedDate');
     let minDate = this.get('minDate');
     let maxDate = this.get('maxDate');
+    let hourOffset = this.get('hourOffset');
 
     let daySpans = Ember.A([]);
 
@@ -61,7 +62,13 @@ export default Ember.Component.extend({
     let today = this.getMoment();
     for (let i = 0; i < daysInMonth; i++) {
       let day = (i + 1);
-      let date = this.getMoment(this.getMoment(viewingDate).startOf('month')).add(day - 1, 'days').toDate();
+      let momentDate = this.getMoment(this.getMoment(viewingDate).startOf('month')).add(day - 1, 'days');
+
+      if (hourOffset) {
+        momentDate.add(hourOffset, 'hours');
+      }
+      let date = momentDate.toDate();
+
       let isSelectedDate = false;
       if (selectedDate) {
         isSelectedDate = this.getMoment(selectedDate).isSame(date, 'day');
@@ -233,7 +240,13 @@ export default Ember.Component.extend({
     keyUp() {
       let dateText = this.get('dateText');
       if (this.get('isValidDate') && dateText !== undefined && dateText !== null && dateText !== '') {
-        this.sendAction('dateChanged', this.getMoment(dateText, this.get('format')).toDate());
+        let momentDate = this.getMoment(dateText, this.get('format'));
+        let hourOffset = this.get('hourOffset');
+        if (hourOffset) {
+          momentDate.add(hourOffset, 'hours');
+        }
+
+        this.sendAction('dateChanged', momentDate.toDate());
       }
       else {
         this.sendAction('dateChanged', null);
