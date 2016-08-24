@@ -34,6 +34,7 @@ Sass is required for this addon. There are a number of sass variables that can e
  * minDate (optional) - When provided this prevents the user from selecting a date earlier than this. It is also used when validating the date's text.
  * maxDate (optional) - When provided this prevents the user from selecting a date after this. It is also used when validating the date's text.
  * utc (optional) - When true dates are parsed in UTC. Defaults to false where local time is then used.
+ * hourOffset (optional) - When provided, dates selected or entered will apply this offset from midnight
 
 ### Sass variables
 
