@@ -43,7 +43,7 @@ export default Ember.Component.extend({
     }
   }),
   daySpans: Ember.computed('_viewingDate', 'selectedDate', 'minDate', 'maxDate', 'hourOffset', function() {
-    let viewingDate = this.get('_viewingDate')
+    let viewingDate = this.get('_viewingDate');
     let selectedDate = this.get('selectedDate');
     let minDate = this.get('minDate');
     let maxDate = this.get('maxDate');
@@ -232,24 +232,26 @@ export default Ember.Component.extend({
       // Used to retain focus in the input by absorbing mouse down 'clicks' on the datepicker that do not have explicit actions
     },
     dateClicked(date) {
-      this.sendAction('dateChanged', date);
+      let isValid = true;
+      this.sendAction('dateChanged', date, isValid);
     },
     downArrowClick() {
       this.$('input').focus();
     },
     keyUp() {
       let dateText = this.get('dateText');
-      if (this.get('isValidDate') && dateText !== undefined && dateText !== null && dateText !== '') {
+      let isValid = this.get('isValidDate');
+      if (isValid && dateText !== undefined && dateText !== null && dateText !== '') {
         let momentDate = this.getMoment(dateText, this.get('format'));
         let hourOffset = this.get('hourOffset');
         if (hourOffset) {
           momentDate.add(hourOffset, 'hours');
         }
 
-        this.sendAction('dateChanged', momentDate.toDate());
+        this.sendAction('dateChanged', momentDate.toDate(), isValid);
       }
       else {
-        this.sendAction('dateChanged', null);
+        this.sendAction('dateChanged', null, isValid);
       }
     },
     monthToggle(value) {

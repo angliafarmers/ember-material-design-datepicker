@@ -63,12 +63,15 @@ test('displays error message and invalid class when error message provided', fun
   assert.equal(this.$('input.invalid').length, 1);
 });
 
-test('date changed returns null for bad year', function(assert) {
-  assert.expect(4);
+test('date changed returns null and invalid for bad year', function(assert) {
+  assert.expect(8);
 
   this.render(hbs`{{md-datepicker dateChanged="assertDateChanged"}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.notOk(isValid);
+  });
 
   this.$('input').val('02/03/-1').keyup();
   this.$('input').val('02/03/12').keyup();
@@ -76,12 +79,15 @@ test('date changed returns null for bad year', function(assert) {
   this.$('input').val('02/03/012').keyup();
 });
 
-test('date changed returns null for bad month in default format', function(assert) {
-  assert.expect(5);
+test('date changed returns null and invalid for bad month in default format', function(assert) {
+  assert.expect(10);
 
   this.render(hbs`{{md-datepicker dateChanged="assertDateChanged"}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.notOk(isValid);
+  });
 
   this.$('input').val('-1/03/2012').keyup();
   this.$('input').val('13/03/2012').keyup();
@@ -90,14 +96,17 @@ test('date changed returns null for bad month in default format', function(asser
   this.$('input').val('2/03/2012').keyup();
 });
 
-test('date changed returns null for bad month in UK format', function(assert) {
-  assert.expect(5);
+test('date changed returns null and invalid for bad month in UK format', function(assert) {
+  assert.expect(10);
 
   let dateFormat = 'DD/MM/YYYY';
   this.set('dateFormat', dateFormat);
   this.render(hbs`{{md-datepicker dateFormat=dateFormat dateChanged="assertDateChanged"}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.notOk(isValid);
+  });
 
   this.$('input').val('03/-1/2012').keyup();
   this.$('input').val('04/13/2012').keyup();
@@ -106,12 +115,15 @@ test('date changed returns null for bad month in UK format', function(assert) {
   this.$('input').val('02/2/2012').keyup();
 });
 
-test('date changed returns null for bad day in default format', function(assert) {
-  assert.expect(10);
+test('date changed returns null and invalid for bad day in default format', function(assert) {
+  assert.expect(15);
 
   this.render(hbs`{{md-datepicker dateChanged="assertDateChanged"}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.notOk(isValid);
+  });
 
   this.$('input').val('03/-1/2012').keyup();
   assert.equal(this.$('.datepicker-error').text().trim(), 'Invalid date, required format is MM/DD/YYYY');
@@ -125,14 +137,17 @@ test('date changed returns null for bad day in default format', function(assert)
   assert.equal(this.$('.datepicker-error').text().trim(), 'Invalid date, required format is MM/DD/YYYY');
 });
 
-test('date changed returns null for bad day in UK format', function(assert) {
-  assert.expect(10);
+test('date changed returns null and invalid for bad day in UK format', function(assert) {
+  assert.expect(15);
 
   let dateFormat = 'DD/MM/YYYY';
   this.set('dateFormat', dateFormat);
   this.render(hbs`{{md-datepicker dateFormat=dateFormat dateChanged="assertDateChanged"}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.notOk(isValid);
+  });
 
   this.$('input').val('-1/03/2012').keyup();
   assert.equal(this.$('.datepicker-error').text().trim(), 'Invalid date, required format is ' + dateFormat);
@@ -147,52 +162,62 @@ test('date changed returns null for bad day in UK format', function(assert) {
 });
 
 test('date changed returns expected date for valid date in default format', function(assert) {
-  assert.expect(1);
+  assert.expect(2);
   let expectedDate = '05/23/2012';
 
   this.render(hbs`{{md-datepicker dateChanged="assertDateChanged"}}`);
 
-  this.on('assertDateChanged', date => {
-    assert.equal(moment(date).format('MM/DD/YYYY'), expectedDate)
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(moment(date).format('MM/DD/YYYY'), expectedDate);
+    assert.ok(isValid);
   });
 
   this.$('input').val(expectedDate).keyup();
 });
 
 test('date changed returns expected date for valid date in UK format', function(assert) {
-  assert.expect(1);
+  assert.expect(2);
   let expectedDate = '23/05/2012';
 
   let dateFormat = 'DD/MM/YYYY';
   this.set('dateFormat', dateFormat);
   this.render(hbs`{{md-datepicker dateFormat=dateFormat dateChanged="assertDateChanged"}}`);
 
-  this.on('assertDateChanged', date => assert.equal(moment(date).format(dateFormat), expectedDate));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(moment(date).format(dateFormat), expectedDate);
+    assert.ok(isValid);
+  });
 
   this.$('input').val(expectedDate).keyup();
 });
 
 test('when not required, a blank date does not display an error', function(assert) {
-  assert.expect(2);
+  assert.expect(3);
 
   let dateFormat = 'DD/MM/YYYY';
   this.set('dateFormat', dateFormat);
   this.render(hbs`{{md-datepicker dateFormat=dateFormat dateChanged="assertDateChanged"}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.ok(isValid);
+  });
 
   this.$('input').val('').keyup();
   assert.equal(this.$('.datepicker-error').length, 0);
 });
 
 test('when required, a blank date displays an error', function(assert) {
-  assert.expect(3);
+  assert.expect(4);
 
   let dateFormat = 'DD/MM/YYYY';
   this.set('dateFormat', dateFormat);
   this.render(hbs`{{md-datepicker dateFormat=dateFormat dateChanged="assertDateChanged" required=true}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.notOk(isValid);
+  });
 
   this.$('input').val('').keyup();
   assert.equal(this.$('.datepicker-error').length, 1);
@@ -238,7 +263,7 @@ test('clicking right hand month toggle changes displayed month to the next month
 });
 
 test('clicking date returns expected date', function(assert) {
-  assert.expect(1);
+  assert.expect(2);
 
   let dateFormat = 'DD/MM/YYYY';
   this.set('dateFormat', dateFormat);
@@ -249,7 +274,10 @@ test('clicking date returns expected date', function(assert) {
   this.render(hbs`{{md-datepicker selectedDate=selectedDate dateFormat=dateFormat dateChanged="assertDateChanged"}}`);
 
   let expectedDate = '02/12/2012';
-  this.on('assertDateChanged', date => assert.equal(moment(date).format(dateFormat), expectedDate));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(moment(date).format(dateFormat), expectedDate);
+    assert.ok(isValid);
+  });
 
   // 2nd of dec
   this.$('button.btn-date:eq(1)').trigger('click');
@@ -272,29 +300,35 @@ test('renders a calendar with disabled days when min or max date specified', fun
   assert.ok(this.$('.btn-date:eq(30)').is(':disabled'));
 });
 
-test('date changed returns null for day earlier than min date', function(assert) {
-  assert.expect(2);
+test('date changed returns null and invalid for day earlier than min date', function(assert) {
+  assert.expect(3);
 
   let minDate = '08/03/2000';
   this.set('minDate', moment(minDate, 'MM/DD/YYYY').toDate());
 
   this.render(hbs`{{md-datepicker dateChanged="assertDateChanged" minDate=minDate}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.notOk(isValid);
+  });
 
   this.$('input').val('08/02/2000').keyup();
   assert.equal(this.$('.datepicker-error').text().trim(), 'Date entered must be on or after 08/03/2000');
 });
 
-test('date changed returns null for day after max date', function(assert) {
-  assert.expect(2);
+test('date changed returns null and invalid for day after max date', function(assert) {
+  assert.expect(3);
 
   let maxDate = '08/25/2000';
   this.set('maxDate', moment(maxDate, 'MM/DD/YYYY').toDate());
 
   this.render(hbs`{{md-datepicker dateChanged="assertDateChanged" maxDate=maxDate}}`);
 
-  this.on('assertDateChanged', date => assert.equal(date, null));
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(date, null);
+    assert.notOk(isValid);
+  });
 
   this.$('input').val('08/26/2000').keyup();
   assert.equal(this.$('.datepicker-error').text().trim(), 'Date entered must be on or before 08/25/2000');

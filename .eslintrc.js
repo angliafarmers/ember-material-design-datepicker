@@ -20,6 +20,7 @@ module.exports = {
     }],
     'keyword-spacing': 2,
     'no-trailing-spaces': 2,
+    'semi': ["error", "always"],
     'space-before-blocks': 2,
     'space-in-parens': 2,
     'space-infix-ops': 2,
