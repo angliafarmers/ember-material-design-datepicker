@@ -5,13 +5,7 @@ export default Ember.Component.extend({
   layout,
   classNames: ['md-datepicker-group'],
   init() {
-    let selectedDate = this.get('selectedDate');
-    if (selectedDate) {
-      this.set('_viewingDate', this.getMoment(selectedDate).toDate());
-    }
-    else {
-      this.set('_viewingDate', this.getMoment().toDate());
-    }
+    this.set('_viewingDate', null);
 
     return this._super(...arguments);
   },
@@ -42,8 +36,8 @@ export default Ember.Component.extend({
       return dateText;
     }
   }),
-  daySpans: Ember.computed('_viewingDate', 'selectedDate', 'minDate', 'maxDate', 'hourOffset', function() {
-    let viewingDate = this.get('_viewingDate');
+  daySpans: Ember.computed('viewingDate', 'selectedDate', 'minDate', 'maxDate', 'hourOffset', function() {
+    let viewingDate = this.get('viewingDate');
     let selectedDate = this.get('selectedDate');
     let minDate = this.get('minDate');
     let maxDate = this.get('maxDate');
@@ -199,13 +193,13 @@ export default Ember.Component.extend({
 
     return '';
   }),
-  viewingLongMonth: Ember.computed('_viewingDate', function() {
-    let _viewingDate = this.get('_viewingDate');
-    return this.getMoment(_viewingDate).format('MMMM');
+  viewingLongMonth: Ember.computed('viewingDate', function() {
+    let viewingDate = this.get('viewingDate');
+    return this.getMoment(viewingDate).format('MMMM');
   }),
-  viewingYear: Ember.computed('_viewingDate', function() {
-    let _viewingDate = this.get('_viewingDate');
-    return this.getMoment(_viewingDate).format('YYYY');
+  viewingYear: Ember.computed('viewingDate', function() {
+    let viewingDate = this.get('viewingDate');
+    return this.getMoment(viewingDate).format('YYYY');
   }),
   selectedYear: Ember.computed('selectedDate', function() {
     let selectedDate = this.get('selectedDate');
@@ -213,6 +207,29 @@ export default Ember.Component.extend({
       return this.getMoment(selectedDate).format('YYYY');
     }
     return '';
+  }),
+  viewingDate: Ember.computed('selectedDate', {
+    set(key, val) {
+      this.set('_viewingDate', val);
+      return val;
+    },
+    get() {
+      let selectedDate = this.get('selectedDate');
+      let _viewingDate = this.get('_viewingDate');
+
+      if (selectedDate) {
+        _viewingDate = selectedDate;
+      }
+      else if (_viewingDate) {
+        return _viewingDate;
+      }
+      else {
+        _viewingDate = this.getMoment().toDate();
+      }
+
+      this.set('_viewingDate', _viewingDate);
+      return _viewingDate;
+    }
   }),
   useStrictMode: Ember.computed('relaxValidation', function() {
     if (this.get('relaxValidation')) {
@@ -255,7 +272,7 @@ export default Ember.Component.extend({
       }
     },
     monthToggle(value) {
-      this.set('_viewingDate', this.getMoment(this.get('_viewingDate')).add(Number(value), 'months').toDate());
+      this.set('viewingDate', this.getMoment(this.get('viewingDate')).add(Number(value), 'months').toDate());
     }
   }
 });
