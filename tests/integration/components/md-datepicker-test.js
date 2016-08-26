@@ -375,3 +375,19 @@ test('date changed returns correct date and time when hour offset is used', func
 
   this.$('input').val(textDate).keyup();
 });
+
+test('updates the calendar view when selected date changes', function(assert) {
+  assert.expect(2);
+
+  let startDate = '08/21/2000';
+  let newDate = '09/22/2000';
+
+  this.set('selectedDate', moment(startDate, 'MM/DD/YYYY').toDate());
+  this.render(hbs`{{md-datepicker selectedDate=selectedDate}}`);
+
+  assert.equal(this.$('.selected-month-year').text().trim(), 'August 2000');
+
+  this.set('selectedDate', moment(newDate, 'MM/DD/YYYY').toDate());
+
+  assert.equal(this.$('.selected-month-year').text().trim(), 'September 2000');
+});
