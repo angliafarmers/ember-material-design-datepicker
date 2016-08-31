@@ -5,8 +5,6 @@
 
 This project aims to bring an easy to use [Material Design](https://www.google.com/design/spec/material-design/introduction.html) themed datepicker to Ember.
 
-## This addon is currently in beta
-
 ## Installation
 
 Install the ember-cli addon in your ember-cli project:

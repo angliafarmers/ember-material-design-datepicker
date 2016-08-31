@@ -1,6 +1,6 @@
 {
   "name": "ember-material-design-datepicker",
-  "version": "0.5.1",
+  "version": "1.0.0",
   "description": "A material design themed datepicker for Ember",
   "directories": {
     "doc": "doc",
@@ -56,7 +56,9 @@
   "keywords": [
     "ember-addon",
     "material-design",
-    "ember-datepicker"
+    "ember-datepicker",
+    "datepicker",
+    "material-design-datepicker"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.6",
