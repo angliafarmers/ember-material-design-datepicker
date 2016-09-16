@@ -207,7 +207,7 @@ test('when not required, a blank date does not display an error', function(asser
   assert.equal(this.$('.datepicker-error').length, 0);
 });
 
-test('when required, a blank date displays an error', function(assert) {
+test('when required, a blank date displays an error once the field is dirty', function(assert) {
   assert.expect(4);
 
   let dateFormat = 'DD/MM/YYYY';

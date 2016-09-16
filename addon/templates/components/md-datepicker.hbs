@@ -1,4 +1,4 @@
-{{input type="text" class=mdClass name=name value=dateText key-up="keyUp" required=required disabled=disabled}}
+{{input type="text" class=mdClass name=name value=dateText key-up="keyUp" required=required disabled=disabled focus-out="focusOut"}}
 <span class="bar"></span>
 <div class="down-arrow" {{action "downArrowClick" on="click"}}><i></i></div>
 <div class="datepicker-container {{if errorMessageShown 'error-message-present' ''}}" {{action 'absorbMouseDown' on="mouseDown" bubbles=false}}>
