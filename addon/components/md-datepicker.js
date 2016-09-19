@@ -6,6 +6,7 @@ export default Ember.Component.extend({
   classNames: ['md-datepicker-group'],
   init() {
     this.set('_viewingDate', null);
+    this.set('isDirty', false);
 
     return this._super(...arguments);
   },
@@ -13,6 +14,11 @@ export default Ember.Component.extend({
     // Currently unable to get right click cut/paste to work, so disable right click for now
     this.$('input').on('contextmenu', function() {
       return false;
+    });
+
+    this.$('input').on('invalid', function(e) {
+      e.preventDefault();
+      self.set('isDirty', true);
     });
 
     return this._super(...arguments);
@@ -147,10 +153,12 @@ export default Ember.Component.extend({
 
     return this.getMoment(dateText, this.get('format'), this.get('useStrictMode')).isAfter(this.getMoment(maxDate), 'day');
   }),
-  isValidDate: Ember.computed('dateText', 'required', 'isEarly', 'isLate', function() {
+  isValidDate: Ember.computed('dateText', 'required', 'isDirty', 'isEarly', 'isLate', function() {
     let dateText = this.get('dateText');
 
-    if (!this.get('required') && (dateText === undefined || dateText === null || dateText === '')) {
+    let notRequiredOrNotDirty = !this.get('required') || !this.get('isDirty');
+
+    if (notRequiredOrNotDirty && (dateText === undefined || dateText === null || dateText === '')) {
       return true;
     }
 
@@ -255,7 +263,12 @@ export default Ember.Component.extend({
     downArrowClick() {
       this.$('input').focus();
     },
+    focusOut() {
+      this.set('isDirty', true);
+    },
     keyUp() {
+      this.set('isDirty', true);
+
       let dateText = this.get('dateText');
       let isValid = this.get('isValidDate');
       if (isValid && dateText !== undefined && dateText !== null && dateText !== '') {
