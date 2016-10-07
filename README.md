@@ -19,8 +19,8 @@ Sass is required for this addon. There are a number of sass variables that can e
 ## Usage
 
 ### Options
- * selectedDate (optional) - The date that should currently be selected
  * dateChanged (required) - When the user selects a new date, or edits the date's text, this action is fired with the new date as the first argument. If the date is deemed invalid then 'null' is sent. The second argument is a bool indicating whether the date was entered was valid or not. In most circumstances your application should consume this action and update ```selectedDate```.
+ * selectedDate (optional) - The date that should currently be selected
  * dateFormat (optional) - Allows the format of the date's text to be changed. Defaults to MM/DD/YYYY.
  * required (optional) - Passed onto the input element and used when validating. Defaults to false.
  * disabled (optional) - Passed onto the input element. When true it prevents the date from being changed. Defaults to false.
