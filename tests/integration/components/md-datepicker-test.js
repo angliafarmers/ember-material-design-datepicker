@@ -391,3 +391,71 @@ test('updates the calendar view when selected date changes', function(assert) {
 
   assert.equal(this.$('.selected-month-year').text().trim(), 'September 2000');
 });
+
+test('Displays the time in input field when mode is set to \'datetime\'', function(assert) {
+  assert.expect(1);
+  let expectedDate = '05/23/2012 13:30';
+  this.set('expectedDate', expectedDate);
+  this.render(hbs`{{md-datepicker mode="datetime" selectedDate=expectedDate}}`);
+
+  assert.equal(this.$('input').val(), expectedDate);
+});
+test('Displays the time in header when mode is set to \'datetime\'', function(assert) {
+  assert.expect(1);
+  let expectedDate = '05/23/2012 13:30';
+  this.render(hbs`{{md-datepicker mode="datetime"}}`);
+
+  assert.equal(this.$('.head-time').length, 1);
+});
+test('Does not display the time in header when mode is not set to \'datetime\'', function(assert) {
+  assert.expect(1);
+  let expectedDate = '05/23/2012 13:30';
+  this.render(hbs`{{md-datepicker}}`);
+
+  assert.equal(this.$('.head-time').length, 0);
+});
+
+test('Display in correct format when a timeFormat is set', function(assert) {
+  assert.expect(1);
+  let expectedDate = '05/23/2012 13:01';
+  this.set('expectedDate', expectedDate);
+  this.render(hbs`{{md-datepicker mode="datetime" selectedDate=expectedDate timeFormat=" h:mm:ss"}}`);
+
+  assert.equal(this.$('input').val(), '05/23/2012 1:01:00');
+
+});
+test('Time part of date persists when another date is selected', function(assert) {
+  assert.expect(1);
+  let expectedDate = '05/23/2012 13:30';
+  this.set('expectedDate', expectedDate);
+  this.render(hbs`{{md-datepicker mode="datetime" selectedDate=expectedDate dateChanged=(action (mut expectedDate))}}`);
+
+  this.$('.btn-date:not(.selected)').first().click();
+  assert.equal(this.$('input').val(), '05/01/2012 13:30');
+});
+
+test('date changed returns expected date and time for valid datetime in default format', function(assert) {
+  assert.expect(2);
+  let expectedDate = '05/23/2012 13:30';
+  this.render(hbs`{{md-datepicker mode="datetime" dateChanged="assertDateChanged"}}`);
+  this.on('assertDateChanged', (date, isValid) => {
+    assert.equal(moment(date).format('MM/DD/YYYY HH:mm'), expectedDate);
+    assert.ok(isValid);
+  });
+  this.$('input').val(expectedDate).keyup();
+});
+
+test('Unexpected mode throws error', function(assert) {
+  assert.throws(() => {
+    this.render(hbs`{{md-datepicker mode="unknownMode" dateChanged="assertDateChanged"}}`);
+  }, new Error('Unknown mode unknownMode'), 'Expect an error with this message');
+});
+
+test('Error message shows when an invalid time is given', function(assert) {
+  assert.expect(1);
+  let expectedDate = '05/23/2012 13:30';
+  this.render(hbs`{{md-datepicker mode="datetime"}}`);
+  this.$('input').val('05/23/2012 13:3').keyup();
+
+  assert.notEqual(this.$('.datepicker-error').length, 0);
+});

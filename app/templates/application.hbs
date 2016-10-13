@@ -49,4 +49,11 @@
       {{md-datepicker placeholder="Enter UK Date" selectedDate=selectedDate6 dateFormat='DD/MM/YYYY' dateChanged=(action (mut selectedDate6)) required=true}}
     </div>
   </div>
+  <div class="row">
+    <div class="col-2">
+      <h3>Date with time</h3>
+      {{md-datepicker placeholder="Enter Date and Time" selectedDate=selectedDate7 dateChanged=(action (mut selectedDate7)) mode='datetime'}}
+      <p>{{selectedDate7}}</p>
+    </div>
+  </div>
 </div>

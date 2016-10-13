@@ -21,7 +21,9 @@ Sass is required for this addon. There are a number of sass variables that can e
 ### Options
  * dateChanged (required) - When the user selects a new date, or edits the date's text, this action is fired with the new date as the first argument. If the date is deemed invalid then 'null' is sent. The second argument is a bool indicating whether the date was entered was valid or not. In most circumstances your application should consume this action and update ```selectedDate```.
  * selectedDate (optional) - The date that should currently be selected
+ * mode (optional) - 'date' or 'datetime' can be set. Defaults to 'date'.
  * dateFormat (optional) - Allows the format of the date's text to be changed. Defaults to MM/DD/YYYY.
+ * timeFormat (Optional) Sets the format of the time. Defaults to 'HH:mm' (Uppercase HH for 24hour clock. lowercase for 12hour).
  * required (optional) - Passed onto the input element and used when validating. Defaults to false.
  * disabled (optional) - Passed onto the input element. When true it prevents the date from being changed. Defaults to false.
  * placeholder (optional) - The text to display above the date's text.
@@ -32,7 +34,7 @@ Sass is required for this addon. There are a number of sass variables that can e
  * minDate (optional) - When provided this prevents the user from selecting a date earlier than this. It is also used when validating the date's text.
  * maxDate (optional) - When provided this prevents the user from selecting a date after this. It is also used when validating the date's text.
  * utc (optional) - When true dates are parsed in UTC. Defaults to false where local time is then used.
- * hourOffset (optional) - When provided, dates selected or entered will apply this offset from midnight
+ * hourOffset (optional) - When provided, dates selected or entered will apply this offset from midnight.
 
 ### Sass variables
 

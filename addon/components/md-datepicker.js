@@ -23,6 +23,12 @@ export default Ember.Component.extend({
 
     return this._super(...arguments);
   },
+  didReceiveAttrs() {
+    if ((this.get('mode') !== undefined) && (this.get('mode') !== 'date') && (this.get('mode') !== 'datetime')) {
+      throw new Error('Unknown mode ' + this.get('mode'));
+    }
+    this._super(...arguments);
+  },
   dateText: Ember.computed('selectedDate', 'format', {
     set(key, val) {
       this.set('_dateText', val);
@@ -40,6 +46,11 @@ export default Ember.Component.extend({
       }
       this.set('_dateText', dateText);
       return dateText;
+    }
+  }),
+  isDateTime: Ember.computed('mode', function() {
+    if (this.get('mode') === 'datetime') {
+      return true;
     }
   }),
   daySpans: Ember.computed('viewingDate', 'selectedDate', 'minDate', 'maxDate', 'hourOffset', function() {
@@ -125,13 +136,23 @@ export default Ember.Component.extend({
   errorMessageShown: Ember.computed('errorMessage', 'isInvalidDate', function() {
     return this.get('errorMessage.length') > 0 || this.get('isInvalidDate');
   }),
-  format: Ember.computed('dateFormat', function() {
+  format: Ember.computed('dateFormat', 'timeFormat', 'isDateTime', function() {
     let dateFormat = this.get('dateFormat');
-    if (dateFormat) {
-      return dateFormat;
-    }
+    let timeFormat = this.get('timeFormat');
 
-    return 'MM/DD/YYYY';
+    let result = 'MM/DD/YYYY';
+    if (dateFormat) {
+      result = dateFormat;
+    }
+    if (this.get('isDateTime')) {
+      if (timeFormat) {
+        result += timeFormat;
+      }
+      else {
+        result += ' HH:mm';
+      }
+    }
+    return result;
   }),
   isEarly: Ember.computed('dateText', 'minDate', 'format', 'useStrictMode', function() {
     let dateText = this.get('dateText');
@@ -216,6 +237,13 @@ export default Ember.Component.extend({
     }
     return '';
   }),
+  selectedTime: Ember.computed('selectedDate', function() {
+    let selectedDate = this.get('selectedDate');
+    if (selectedDate) {
+      return this.getMoment(selectedDate).format('HH:mm');
+    }
+    return '';
+  }),
   viewingDate: Ember.computed('selectedDate', {
     set(key, val) {
       this.set('_viewingDate', val);
@@ -258,6 +286,15 @@ export default Ember.Component.extend({
     },
     dateClicked(date) {
       let isValid = true;
+
+      // Preserve selected time
+      let selectedDate = this.get('selectedDate');
+      if (selectedDate) {
+        date.setHours(this.getMoment(selectedDate).format('HH'));
+        date.setMinutes(this.getMoment(selectedDate).format('mm'));
+        date.setSeconds(this.getMoment(selectedDate).format('ss'));
+      }
+
       this.sendAction('dateChanged', date, isValid);
     },
     downArrowClick() {

@@ -4,6 +4,11 @@
 <div class="datepicker-container {{if errorMessageShown 'error-message-present' ''}}" {{action 'absorbMouseDown' on="mouseDown" bubbles=false}}>
   <div class="datepicker-inner">
     <div class="datepicker-head">
+      {{#if isDateTime}}
+      <div class="head-time">
+        <p>{{selectedTime}}</p>
+      </div>
+      {{/if}}
       <div class="head-year">
         <p>{{selectedYear}}</p>
       </div>
