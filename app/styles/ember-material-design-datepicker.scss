@@ -183,7 +183,12 @@ $font-small: 12px !default;
         background-color: $accent-color;
         color: $text-on-accent-color;
         border-radius: 3px 3px 0 0;
-        padding: 18px 0 0 21px;
+        padding: 18px 21px 0 21px;
+
+        .head-time {
+          font-size: 14px;
+          float: right;
+        }
 
         .head-year {
           font-size: 14px;
@@ -194,8 +199,6 @@ $font-small: 12px !default;
           font-size: 32px;
           font-weight: 500;
         }
-
-
       }
 
       .datepicker-main {
