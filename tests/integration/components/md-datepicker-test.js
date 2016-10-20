@@ -280,7 +280,7 @@ test('clicking date returns expected date', function(assert) {
   });
 
   // 2nd of dec
-  this.$('button.btn-date:eq(1)').trigger('click');
+  this.$('.btn-date:eq(1)').trigger('click');
 });
 
 test('renders a calendar with disabled days when min or max date specified', function(assert) {
@@ -294,10 +294,9 @@ test('renders a calendar with disabled days when min or max date specified', fun
   this.set('maxDate', moment(maxDate, 'MM/DD/YYYY').toDate());
   this.render(hbs`{{md-datepicker selectedDate=selectedDate minDate=minDate maxDate=maxDate}}`);
 
-  assert.ok(this.$('.btn-date:eq(0)').is(':disabled'));
-  assert.ok(this.$('.btn-date:eq(1)').is(':disabled'));
-
-  assert.ok(this.$('.btn-date:eq(30)').is(':disabled'));
+  assert.ok(this.$('.btn-date:eq(0)').is('.disabled'));
+  assert.ok(this.$('.btn-date:eq(1)').is('.disabled'));
+  assert.ok(this.$('.btn-date:eq(30)').is('.disabled'));
 });
 
 test('date changed returns null and invalid for day earlier than min date', function(assert) {

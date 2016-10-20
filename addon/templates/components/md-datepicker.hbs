@@ -18,23 +18,23 @@
     </div>
     <div class="datepicker-main">
       <div class="month-select">
-        <button class="month-toggle" type="button" {{action 'monthToggle' '-1'}}>
+        <span class="month-toggle" {{action 'monthToggle' '-1'}}>
           <div>
             <svg viewBox="0 0 24 24">
               <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
             </svg>
           </div>
-        </button>
+        </span>
         <div class="selected-month-year">
           <p>{{viewingLongMonth}} {{viewingYear}}</p>
         </div>
-        <button class="month-toggle" type="button" {{action 'monthToggle' '1'}}>
+        <span class="month-toggle" {{action 'monthToggle' '1'}}>
           <div>
             <svg viewBox="0 0 24 24">
               <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
             </svg>
           </div>
-        </button>
+        </span>
       </div>
       <div class="day-header">
         <span>M</span>
@@ -50,10 +50,10 @@
           <div class="week">
             {{#each weekSpan.daySpans as |daySpan|}}
               {{#if daySpan.day.length}}
-                <button type="button" class={{if daySpan.isSelectedDate "btn-date selected" "btn-date"}} disabled={{daySpan.disabled}} {{action "dateClicked" daySpan.date}}>
+                <span class={{daySpan.className}} {{action "dateClicked" daySpan}}>
                   <div class="date-circle"></div>
                   <span class={{if daySpan.today "today"}}>{{daySpan.day}}</span>
-                </button>
+                </span>
               {{else}}
                 <span class="blank-day"></span>
               {{/if}}

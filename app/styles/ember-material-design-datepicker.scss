@@ -297,6 +297,7 @@ $font-small: 12px !default;
               span {
                 position: relative;
                 color: $datepicker-main-text-color;
+                line-height: 29px;
 
                 &.today {
                   color: $accent-color;
@@ -325,7 +326,7 @@ $font-small: 12px !default;
                 }
               }
 
-              &:disabled {
+              &.disabled {
                 cursor: not-allowed;
 
                 span {
