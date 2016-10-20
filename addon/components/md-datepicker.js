@@ -93,7 +93,15 @@ export default Ember.Component.extend({
         disabled = true;
       }
 
-      daySpans.pushObject({ day: day.toString(), today: today.isSame(date, 'day'), isSelectedDate, date, disabled });
+      let className = 'btn-date';
+      if (isSelectedDate) {
+        className = 'btn-date selected';
+      }
+      if (disabled) {
+        className += ' disabled';
+      }
+
+      daySpans.pushObject({ day: day.toString(), today: today.isSame(date, 'day'), isSelectedDate, date, className, disabled });
     }
 
     // Fill out remaining row
@@ -284,7 +292,8 @@ export default Ember.Component.extend({
     absorbMouseDown() {
       // Used to retain focus in the input by absorbing mouse down 'clicks' on the datepicker that do not have explicit actions
     },
-    dateClicked(date) {
+    dateClicked(dayspan) {
+      let date = dayspan.date;
       let isValid = true;
 
       // Preserve selected time
@@ -294,8 +303,9 @@ export default Ember.Component.extend({
         date.setMinutes(this.getMoment(selectedDate).format('mm'));
         date.setSeconds(this.getMoment(selectedDate).format('ss'));
       }
-
-      this.sendAction('dateChanged', date, isValid);
+      if (!dayspan.disabled) {
+        this.sendAction('dateChanged', dayspan.date, isValid);
+      }
     },
     downArrowClick() {
       this.$('input').focus();
