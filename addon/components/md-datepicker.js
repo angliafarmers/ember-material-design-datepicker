@@ -12,6 +12,7 @@ export default Ember.Component.extend({
   },
   didInsertElement() {
     // Currently unable to get right click cut/paste to work, so disable right click for now
+    let self = this;
     this.$('input').on('contextmenu', function() {
       return false;
     });
