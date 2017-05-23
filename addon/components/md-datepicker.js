@@ -306,6 +306,10 @@ export default Ember.Component.extend({
       }
       if (!dayspan.disabled) {
         this.sendAction('dateChanged', dayspan.date, isValid);
+
+        if (this.get('clearErrorMessageOnChange')) {
+          this.set('errorMessage', null);
+        }
       }
     },
     downArrowClick() {
@@ -330,6 +334,10 @@ export default Ember.Component.extend({
       }
       else {
         this.sendAction('dateChanged', null, isValid);
+      }
+
+      if (this.get('clearErrorMessageOnChange')) {
+        this.set('errorMessage', null);
       }
     },
     monthToggle(value) {
