@@ -35,7 +35,8 @@ Sass is required for this addon. There are a number of sass variables that can e
  * maxDate (optional) - When provided this prevents the user from selecting a date after this. It is also used when validating the date's text.
  * utc (optional) - When true dates are parsed in UTC. Defaults to false where local time is then used.
  * hourOffset (optional) - When provided, dates selected or entered will apply this offset from midnight.
-
+ * autoHideAfterSelection (optional) - Default: true. When false, the datepicker remains on display after selecting date.
+ 
 ### Sass variables
 
 A number of sass variables can be overridden by your application [See the top of ember-material-design-datepicker.scss](ember-material-design-datepicker.scss).

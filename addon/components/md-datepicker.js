@@ -310,6 +310,14 @@ export default Ember.Component.extend({
         if (this.get('clearErrorMessageOnChange')) {
           this.set('errorMessage', null);
         }
+
+        let autoHide = this.get('autoHideAfterSelection');
+        if (autoHide === undefined || autoHide === null) {
+          autoHide = true;
+        }
+        if (autoHide) {
+          this.$('input').blur();
+        }
       }
     },
     downArrowClick() {

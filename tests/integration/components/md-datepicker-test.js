@@ -458,3 +458,45 @@ test('Error message shows when an invalid time is given', function(assert) {
 
   assert.notEqual(this.$('.datepicker-error').length, 0);
 });
+
+test('Datepicker hides when date selected by default', function(assert) {
+  assert.expect(1);
+  let done = assert.async();
+  this.set('selectedDate', moment('02/04/2017', 'DD/MM/YYYY').toDate());
+  this.render(hbs`{{md-datepicker selectedDate=selectedDate}}`);
+  this.$('input').focus();
+  this.$('.btn-date:eq(0)').trigger('click');
+
+  setTimeout(() => {
+    assert.equal(this.$('.datepicker-inner:visible').length, 0);
+    done();
+  });
+});
+
+test('Datepicker hides when date selected and autoHideAfterSelection=true', function(assert) {
+  assert.expect(1);
+  let done = assert.async();
+  this.set('selectedDate', moment('02/04/2017', 'DD/MM/YYYY').toDate());
+  this.render(hbs`{{md-datepicker selectedDate=selectedDate autoHideAfterSelection=true}}`);
+  this.$('input').focus();
+  this.$('.btn-date:eq(0)').trigger('click');
+
+  setTimeout(() => {
+    assert.equal(this.$('.datepicker-inner:visible').length, 0);
+    done();
+  });
+});
+
+test('Datepicker does not hide when date selected and autoHideAfterSelection=false', function(assert) {
+  assert.expect(1);
+  let done = assert.async();
+  this.set('selectedDate', moment('02/04/2017', 'DD/MM/YYYY').toDate());
+  this.render(hbs`{{md-datepicker selectedDate=selectedDate autoHideAfterSelection=false}}`);
+  this.$('input').focus();
+  this.$('.btn-date:eq(0)').trigger('click');
+
+  setTimeout(() => {
+    assert.equal(this.$('.datepicker-inner:visible').length, 1);
+    done();
+  });
+});
