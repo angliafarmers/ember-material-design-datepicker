@@ -56,4 +56,11 @@
       <p>{{selectedDate7}}</p>
     </div>
   </div>
+  <div class="row">
+    <div class="col-2">
+      <h3>With auto hide disabled</h3>
+      {{md-datepicker placeholder="Enter Date and Time" selectedDate=selectedDate dateChanged=(action (mut selectedDate)) required=true autoHideAfterSelection=false}}
+      <p>{{selectedDate}}</p>
+    </div>
+  </div>
 </div>
