@@ -1,6 +1,6 @@
 {
   "name": "ember-material-design-datepicker",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "A material design themed datepicker for Ember",
   "directories": {
     "doc": "doc",
@@ -24,10 +24,18 @@
   "author": "Anglia Farmers Ltd",
   "contributors": [
     {
-      "name": "Adam Lawson",
-      "name": "Adam Knights",
-      "name": "David Tyheridge",
-      "name": "Lee Austin",
+      "name": "Adam Lawson"
+    },
+    {
+      "name": "Adam Knights"
+    },
+    {
+      "name": "David Tyheridge"
+    },
+    {
+      "name": "Lee Austin"
+    },
+    {
       "name": "Simon Harper"
     }
   ],
