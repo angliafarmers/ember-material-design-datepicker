@@ -4,6 +4,7 @@ import layout from '../templates/components/md-datepicker';
 export default Ember.Component.extend({
   layout,
   classNames: ['md-datepicker-group'],
+  locale: null,
   init() {
     this.set('_viewingDate', null);
     this.set('isDirty', false);
@@ -214,7 +215,7 @@ export default Ember.Component.extend({
 
     return '';
   }),
-  selectedDayMonth: Ember.computed('selectedDate', 'isInvalidDate', 'dateText', function() {
+  selectedDayMonth: Ember.computed('selectedDate', 'isInvalidDate', 'dateText', 'locale', function() {
     let selectedDate = this.get('selectedDate');
     let dateText = this.get('dateText');
 
@@ -231,7 +232,7 @@ export default Ember.Component.extend({
 
     return '';
   }),
-  viewingLongMonth: Ember.computed('viewingDate', function() {
+  viewingLongMonth: Ember.computed('viewingDate', 'locale', function() {
     let viewingDate = this.get('viewingDate');
     return this.getMoment(viewingDate).format('MMMM');
   }),
@@ -283,11 +284,27 @@ export default Ember.Component.extend({
 
     return true;
   }),
-  getMoment(date, format, useStrictMode) {
-    if (this.get('utc')) {
-      return moment.utc(date, format, useStrictMode);
+  weekDays: Ember.computed('locale', function() {
+    const locale = this.get('locale');
+    let days = Ember.A([]);
+
+    for (let i = 1; i < 8; ++i) {
+      days.pushObject(moment().isoWeekday(i).locale(locale).format('dd').toUpperCase()[0]);
     }
-    return moment(date, format, useStrictMode);
+
+    return days;
+  }),
+  getMoment(date, format, useStrictMode) {
+    let datetime;
+
+    if (this.get('utc')) {
+      datetime = moment.utc(date, format, useStrictMode);
+    }
+    else {
+      datetime = moment(date, format, useStrictMode);
+    }
+
+    return datetime.locale(this.get('locale'));
   },
   actions: {
     absorbMouseDown() {

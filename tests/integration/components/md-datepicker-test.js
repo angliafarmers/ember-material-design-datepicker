@@ -500,3 +500,18 @@ test('Datepicker does not hide when date selected and autoHideAfterSelection=fal
     done();
   });
 });
+
+test('Datepicker changes date locale', function(assert) {
+  assert.expect(2);
+  this.setProperties({
+    selectedDate: moment('01/01/2017', 'DD/MM/YYYY').toDate(),
+    locale: null
+  });
+  this.render(hbs`{{md-datepicker selectedDate=selectedDate locale=locale}}`);
+
+  assert.equal(this.$('.selected-month-year').text().trim(), 'January 2017');
+
+  this.set('locale', 'de');
+
+  assert.equal(this.$('.selected-month-year').text().trim(), 'Januar 2017');
+});

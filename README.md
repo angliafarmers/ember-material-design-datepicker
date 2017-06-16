@@ -36,6 +36,7 @@ Sass is required for this addon. There are a number of sass variables that can e
  * utc (optional) - When true dates are parsed in UTC. Defaults to false where local time is then used.
  * hourOffset (optional) - When provided, dates selected or entered will apply this offset from midnight.
  * autoHideAfterSelection (optional) - Default: true. When false, the datepicker remains on display after selecting date.
+ * locale (optional) - Default: 'en'. Sets component's locale. [See moment.js instance locales](https://momentjs.com/docs/#/i18n/instance-locale/).
  
 ### Sass variables
 
