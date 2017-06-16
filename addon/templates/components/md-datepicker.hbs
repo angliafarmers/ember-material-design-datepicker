@@ -37,13 +37,9 @@
         </span>
       </div>
       <div class="day-header">
-        <span>M</span>
-        <span>T</span>
-        <span>W</span>
-        <span>T</span>
-        <span>F</span>
-        <span>S</span>
-        <span>S</span>
+        {{#each weekDays as |day|}}
+          <span>{{day}}</span>
+        {{/each}}
       </div>
       <div class="day-select">
         {{#each weekSpans as |weekSpan|}}
