@@ -161,7 +161,13 @@ $font-small: 12px !default;
     position: absolute;
     z-index: 100;
     width: 311px;
-    top: 40px;
+
+    &.drop-up {
+      bottom: 50px;
+    }
+    &.drop-down {
+      top: 40px;
+    }
 
     p {
       margin: 0;

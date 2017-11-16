@@ -294,6 +294,9 @@ export default Ember.Component.extend({
 
     return days;
   }),
+  dropUpDownClass: Ember.computed('dropUp', function() {
+    return this.get('dropUp') ? 'drop-up' : 'drop-down';
+  }),
   getMoment(date, format, useStrictMode) {
     let datetime;
 
