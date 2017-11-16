@@ -37,7 +37,8 @@ Sass is required for this addon. There are a number of sass variables that can e
  * hourOffset (optional) - When provided, dates selected or entered will apply this offset from midnight.
  * autoHideAfterSelection (optional) - Default: true. When false, the datepicker remains on display after selecting date.
  * locale (optional) - Default: 'en'. Sets component's locale. [See moment.js instance locales](https://momentjs.com/docs/#/i18n/instance-locale/).
- 
+ * dropUp (optional) - Default: false. Causes the control to drop up when true.  Drops down by default/when false.
+
 ### Sass variables
 
 A number of sass variables can be overridden by your application [See the top of ember-material-design-datepicker.scss](ember-material-design-datepicker.scss).
